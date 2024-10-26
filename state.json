@@ -11,8 +11,8 @@
     }
   ],
   "ordersMessageIds": [
-    "1299676558289534987",
-    "1299676560000815136"
+    "1299733986863747146",
+    "1299733989371936788"
   ],
   "orders": [
     {
@@ -53,7 +53,7 @@
     {
       "order_id": "183610854219206",
       "tracking_number": "SPXVN04698153553A",
-      "tracking_info_description": "Đơn hàng đã rời bưu cục",
+      "tracking_info_description": "Đơn hàng đã đến kho phân loại Xã Tân Phú Trung, Huyện Củ Chi, TP. Hồ Chí Minh",
       "address": {
         "shipping_name": "Khanh Ngoc",
         "shipping_phone": "84937567076",

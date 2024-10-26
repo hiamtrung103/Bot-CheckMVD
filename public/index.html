@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #order-list {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .order-item {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-left: 5px solid #3498db;
+      position: relative;
+    }
+    .order-item img {
+      width: 100px;
+      height: auto;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      border-radius: 5px;
+    }
+    .order-item h3 {
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+      color: #2c3e50;
+    }
+    .order-item p {
+      margin: 5px 0;
+    }
+    .order-item .tracking-info {
+      font-weight: bold;
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Order Details</h1>
+<div id="order-list">
+  <!-- Danh sách đơn hàng sẽ được hiển thị tại đây -->
+</div>
+
+<script>
+  // Hàm để lấy dữ liệu đơn hàng từ server
+  async function fetchOrders() {
+    try {
+      const response = await fetch('/api/orders');
+      const data = await response.json();
+
+      // Lấy phần tử hiển thị danh sách đơn hàng
+      const orderList = document.getElementById('order-list');
+
+      // Xóa danh sách cũ
+      orderList.innerHTML = '';
+
+      // Thêm thông tin đơn hàng vào danh sách
+      if (data.orders && data.orders.length > 0) {
+        data.orders.forEach(order => {
+          const orderItem = document.createElement('div');
+          orderItem.classList.add('order-item');
+
+          const productName = order.product_info && order.product_info.length > 0 ? order.product_info[0].name : "Sản phẩm không xác định";
+          let productImage = order.product_info && order.product_info.length > 0 ? order.product_info[0].image : "";
+
+          // Kiểm tra và thêm tiền tố URL nếu cần
+          if (productImage && !productImage.startsWith('http')) {
+            productImage = `https://cf.shopee.vn/file/${productImage}`;
+          }
+
+          orderItem.innerHTML = `
+            <h3>Mã vận đơn: ${order.tracking_number}</h3>
+            <p><strong>Tên người nhận:</strong> ${order.address.shipping_name}</p>
+            <p><strong>Số điện thoại:</strong> ${order.address.shipping_phone}</p>
+            <p><strong>Địa chỉ:</strong> ${order.address.shipping_address}</p>
+            <p class="tracking-info"><strong>Mô tả theo dõi:</strong> ${order.tracking_info_description}</p>
+            <p><strong>Sản phẩm:</strong> ${productName}</p>
+            ${productImage ? `<img src="${productImage}" alt="${productName}" onerror="this.style.display='none'"/>` : ''}
+          `;
+
+          orderList.appendChild(orderItem);
+        });
+      } else {
+        orderList.textContent = 'Không có đơn hàng nào.';
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  }
+
+  // Gọi hàm fetchOrders mỗi 15 giây để cập nhật danh sách đơn hàng
+  setInterval(fetchOrders, 15000);
+
+  // Gọi lần đầu để hiển thị dữ liệu ngay khi trang được tải
+  fetchOrders();
+</script>
+
+</body>
+</html>

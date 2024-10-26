@@ -14,42 +14,6 @@ const checkMVD = async (trackingList) => {
   }
 };
 
-// Hàm để tạo QR code
-const generateQRCode = async () => {
-  try {
-    const res = await axios.get(`${baseURL}/api/shopee/generate-qr-code`);
-    return res.data.data;
-  } catch (err) {
-    console.error("Error generating QR code:", err);
-    return null;
-  }
-};
-
-const checkQRCode = async (qrcodeId) => {
-  try {
-    const res = await axios.get(
-      `${baseURL}/api/shopee/check-qr-status?qrcode_id=${encodeURIComponent(
-        qrcodeId
-      )}`
-    );
-    return res.data.data;
-  } catch (err) {
-    console.error("Error checking QR code status:", err);
-    return null;
-  }
-};
-
-const loginQRCode = async (qrcodeToken) => {
-  try {
-    const res = await axios.post(`${baseURL}/api/shopee/login-qr`, {
-      qrcodeToken,
-    });
-    return res.data;
-  } catch (err) {
-    console.error("Error checking QR code status:", err);
-    return null;
-  }
-};
 
 const getOrderDetailsForCookie = async (cookiesArray) => {
   try {
@@ -64,72 +28,9 @@ const getOrderDetailsForCookie = async (cookiesArray) => {
   }
 };
 
-const saveVoucher = async (cookie) => {
-  try {
-    const res = await axios.post(
-      `https://us-central1-auto-pee.cloudfunctions.net/app/v2/api/shopee/saveVoucher7`,
-      {
-        cookie,
-      }
-    );
-    return res.data;
-  } catch (err) {
-    console.error("Error addAddress:", err);
-    return null;
-  }
-};
-
-const loginWithPassword = async (username, password, spc_f) => {
-  try {
-    const res = await axios.post(`${baseURL}/api/shopee/loginWithPassword`, {
-      username,
-      password,
-      spc_f,
-    });
-    return res.data;
-  } catch (err) {
-    console.error("Error fetching loginWithPassword:", err);
-    return null;
-  }
-};
-
-const getOrderDetail = async (order_sn, cookiesArray) => {
-  try {
-    const url = "https://partner.shopeemobile.com/api/v2/order/get_order_detail";
-    
-    // Sử dụng cookiesArray để tạo chuỗi cookie
-    const cookieString = cookiesArray.join('; ');
-
-    const headers = {
-      'Cookie': cookieString, // Truyền cookie trong header
-      'Content-Type': 'application/json'
-    };
-
-    const res = await axios.post(
-      url, 
-      {
-        order_sn: order_sn // Mã đơn hàng
-        // Có thể cần thêm các tham số khác tùy vào yêu cầu của Shopee API
-      },
-      { headers } // Gửi cookie trong phần headers
-    );
-
-    return res.data.response.order_list[0]; // Lấy đơn hàng đầu tiên trong danh sách
-  } catch (err) {
-    console.error("Error fetching order details:", err);
-    return null;
-  }
-};
-
 module.exports = {
   checkMVD,
-  generateQRCode,
-  checkQRCode,
-  loginQRCode,
   getOrderDetailsForCookie,
-  saveVoucher,
-  loginWithPassword,
-  getOrderDetail,
 };
 
 

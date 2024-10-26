@@ -132,7 +132,7 @@ const fetchOrderDetails = async (cookiesArray, interaction = null) => {
 
         if (
           description.includes(
-            "Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại"
+            "Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại" && "Đơn hàng đã đến trạm giao hàng tại khu vực của bạn Phường 2, Quận Tân Bình, TP. Hồ Chí Minh và sẽ được giao trong vòng 24 giờ tiếp theo"
           )
         ) {
           color = 0x3498db; // Màu xanh nước
