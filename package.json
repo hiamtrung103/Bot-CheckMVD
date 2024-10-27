@@ -13,5 +13,8 @@
     "client": "node index",
     "server": "node server",
     "start": "concurrently \"npm run client\" \"npm run server\""
+  },
+  "engines": {
+    "node": ">=18.x"
   }
 }
