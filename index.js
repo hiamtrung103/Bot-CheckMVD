@@ -9,9 +9,13 @@ const {
   ButtonStyle,
 } = require("discord.js");
 const fs = require("fs");
-const { checkMVD, getOrderDetailsForCookie, getOrderDetail } = require("./Api/checkmvd");
+const {
+  checkMVD,
+  getOrderDetailsForCookie,
+  getOrderDetail,
+} = require("./Api/checkmvd");
 const { REST } = require("@discordjs/rest");
-require('dotenv').config();
+require("dotenv").config();
 
 const client = new Client({
   intents: [
@@ -21,7 +25,7 @@ const client = new Client({
   ],
 });
 
-const token = process.env.DISCORD_TOKEN
+const token = process.env.DISCORD_TOKEN;
 const clientId = process.env.CLIENT_ID; // Thay bằng client ID của bot của bạn
 
 // Đọc dữ liệu từ tệp JSON và đảm bảo các thuộc tính cần thiết
@@ -132,7 +136,8 @@ const fetchOrderDetails = async (cookiesArray, interaction = null) => {
 
         if (
           description.includes(
-            "Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại" && "Đơn hàng đã đến trạm giao hàng tại khu vực của bạn Phường 2, Quận Tân Bình, TP. Hồ Chí Minh và sẽ được giao trong vòng 24 giờ tiếp theo"
+            "Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại" &&
+              "Đơn hàng đã đến trạm giao hàng tại khu vực của bạn Phường 2, Quận Tân Bình, TP. Hồ Chí Minh và sẽ được giao trong vòng 24 giờ tiếp theo"
           )
         ) {
           color = 0x3498db; // Màu xanh nước
@@ -240,7 +245,7 @@ const fetchOrderDetails = async (cookiesArray, interaction = null) => {
           // Xóa danh sách ID sau khi xóa
           state.ordersMessageIds = [];
         } catch (err) {
-          console.error('Lỗi khi xóa các tin nhắn cũ:', err);
+          console.error("Lỗi khi xóa các tin nhắn cũ:", err);
         }
       }
 
@@ -253,7 +258,10 @@ const fetchOrderDetails = async (cookiesArray, interaction = null) => {
             const embed = embeds[i];
             const actionRow = components[i];
 
-            const message = await channel.send({ embeds: [embed], components: [actionRow] });
+            const message = await channel.send({
+              embeds: [embed],
+              components: [actionRow],
+            });
             // Lưu trữ ID của tin nhắn
             state.ordersMessageIds.push(message.id);
           }
@@ -268,7 +276,10 @@ const fetchOrderDetails = async (cookiesArray, interaction = null) => {
           const embed = embeds[i];
           const actionRow = components[i];
 
-          const message = await channel.send({ embeds: [embed], components: [actionRow] });
+          const message = await channel.send({
+            embeds: [embed],
+            components: [actionRow],
+          });
           // Lưu trữ ID của tin nhắn
           state.ordersMessageIds.push(message.id);
         }
@@ -312,7 +323,7 @@ client.on("interactionCreate", async (interaction) => {
           const replyMessage = await interaction.reply({
             content: "Đã thêm",
             fetchReply: true,
-            ephemeral: true
+            ephemeral: true,
           });
 
           // Tự động xóa tin nhắn sau 15 giây
@@ -324,7 +335,7 @@ client.on("interactionCreate", async (interaction) => {
           const replyMessage = await interaction.reply({
             content: "Cookie đã tồn tại",
             fetchReply: true,
-            ephemeral: true
+            ephemeral: true,
           });
           // Tự động xóa tin nhắn sau 15 giây
           setTimeout(() => replyMessage.delete(), 15000);
@@ -338,7 +349,7 @@ client.on("interactionCreate", async (interaction) => {
           const replyMessage = await interaction.reply({
             content: "Đã xoá",
             fetchReply: true,
-            ephemeral: true
+            ephemeral: true,
           });
 
           // Tự động xóa tin nhắn sau 15 giây
@@ -350,7 +361,7 @@ client.on("interactionCreate", async (interaction) => {
           const replyMessage = await interaction.reply({
             content: "Không tìm thấy cookie",
             fetchReply: true,
-            ephemeral: true
+            ephemeral: true,
           });
           // Tự động xóa tin nhắn sau 15 giây
           setTimeout(() => replyMessage.delete(), 15000);
@@ -360,7 +371,7 @@ client.on("interactionCreate", async (interaction) => {
           const replyMessage = await interaction.reply({
             content: `Các cookie hiện có:\n${state.cookies.join("\n")}`,
             fetchReply: true,
-            ephemeral: true
+            ephemeral: true,
           });
           // Tự động xóa tin nhắn sau 30 giây
           setTimeout(() => replyMessage.delete(), 30000);
@@ -368,7 +379,7 @@ client.on("interactionCreate", async (interaction) => {
           const replyMessage = await interaction.reply({
             content: "Không có cookie nào được lưu trữ",
             fetchReply: true,
-            ephemeral: true
+            ephemeral: true,
           });
           // Tự động xóa tin nhắn sau 30 giây
           setTimeout(() => replyMessage.delete(), 30000);
@@ -470,10 +481,18 @@ client.on("interactionCreate", async (interaction) => {
 
       if (customId.startsWith("copy_tracking_")) {
         // Xử lý copy mã vận đơn
-        await interaction.reply({
-          content: `${order.tracking_number}`,
-          ephemeral: true,
-        });
+        const trackingNumber = order.tracking_number;
+        if (trackingNumber) {
+          await interaction.reply({
+            content: `${trackingNumber}`,
+            ephemeral: true,
+          });
+        } else {
+          await interaction.reply({
+            content: "Không có mã vận đơn.",
+            ephemeral: true,
+          });
+        }
       } else if (customId.startsWith("copy_cookie_")) {
         // Xử lý copy cookie
         await interaction.reply({
@@ -544,7 +563,7 @@ setInterval(async () => {
       console.error("Lỗi khi cập nhật tin nhắn:", error);
     }
   }
-}, 15 * 60 * 1000); // Mỗi 15 phút (15 * 60 * 1000)
+}, 1 * 60 * 1000); // Mỗi 15 phút (15 * 60 * 1000)
 
 // const logFullOrderDetails = async (cookiesArray) => {
 //   try {
@@ -558,10 +577,10 @@ setInterval(async () => {
 // Khi bot sẵn sàng
 client.once("ready", () => {
   console.log(`Đăng nhập thành công với tên ${client.user.tag}!`);
-  
+
   if (state.cookies.length > 0) {
     // logFullOrderDetails(state.cookies); // Gọi hàm để in toàn bộ thông tin ra console
-    
+
     if (state.trackingChannelId && state.ordersMessageIds.length > 0) {
       // Xóa tin nhắn cũ khi khởi động
       setImmediate(async () => {

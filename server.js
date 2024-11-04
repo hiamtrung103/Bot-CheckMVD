@@ -35,7 +35,7 @@ const updateOrdersData = () => {
 };
 
 // Tự động cập nhật mỗi 15 phút
-setInterval(updateOrdersData, 15000); // 15 phút
+setInterval(updateOrdersData, 15 * 60 * 1000); // 15 phút
 
 // Gọi hàm cập nhật ngay khi server khởi động
 updateOrdersData();
